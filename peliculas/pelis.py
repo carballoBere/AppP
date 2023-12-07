@@ -5,22 +5,28 @@ from werkzeug.exceptions import abort
 
 from peliculas.db import get_db
 
-bp = Blueprint ('pelis',__name__)
+bp = Blueprint ('pelis',__name__, url_prefix="/pelis")
 @bp.route('/')
 def index():
     db = get_db()
     pelis = db.execute(
-        """SELECT l.name as lenguage, f.title as titulo
-            from language l JOIN film f ON l.language_id = f.language_id
-            ORDER BY name ASC"""
+        """SELECT title as titulo, film_id
+            FROM film 
+            ORDER BY titulo ASC"""
     ).fetchall()
     return render_template('pelis/index.html',pelis = pelis)
 
+@bp.route('/<int:id>')
 def detalle(id):
-    pelis = get_db().execute(
-        """SELECT f.title as peliculas,f.film_id FROM film.f
+    peli = get_db().execute(
+        """SELECT l.name as lenguaje, f.title as titulo
+            FROM language l JOIN film f ON l.language_id = f.language_id
+            WHERE f.film_id = ?""", (id,)
+            ).fetchone()
+    actores = get_db().execute(
+        """SELECT a.first_name, a.last_Name, a.actor_id FROM film f
         JOIN film_actor fa ON f.film_id = fa.film_id
         JOIN actor a ON fa.actor_id = a.actor_id
-        WHERE a.actor_id = ?""", (id,)
-            ).fetchone()
-    return render_template('peliculas/update.html',pelis=pelis )
+        WHERE f.film_id = ?""", (id,)
+            ).fetchall()
+    return render_template('pelis/detalle.html',peli=peli, actores=actores )

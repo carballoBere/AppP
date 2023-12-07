@@ -1,11 +1,15 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %}Peliculas{% endblock %}</h1>
-{% endblock %} {% block content %} {% for pel in pelis %}
+{% endblock %} {% block content %}
+<h1>{{peli['titulo']}}</h1>
+<h2>Lenguaje: {{peli['lenguaje']}}</h2>
+<hr />
+<h3>Actores:</h3>
+{% for actor in actores %}
 <article class="post">
   <header>
     <div>
-      <h1>{{ actor['nombre'] }}</h1>
-      <div class="about">{{ actor['nombre'] }}</div>
+      <h4>{{ actor['first_name'] }} {{actor['last_name']}}</h4>
     </div>
   </header>
 </article>

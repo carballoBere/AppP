@@ -4,8 +4,9 @@
 <article class="post">
   <header>
     <div>
-      <h1>{{ pel['titulo'] }}</h1>
-      <div class="about">{{ pel['lenguage'] }}</div>
+      <a href="{{url_for('pelis.detalle', id=pel['film_id'])}}">
+        <h1>{{ pel['titulo'] }}</h1>
+      </a>
     </div>
   </header>
 </article>
